@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Restaurant, RestaurantDocument } from './restaurant.schema';
 import { Model, Types } from 'mongoose';
@@ -18,7 +14,9 @@ export class RestaurantService {
   ) {}
 
   async create(dto: CreateRestaurantDto) {
-    const cuisineIds = await this.validateAndGetCuisineIds(dto.cuisines);
+    const cuisineIds = await this.cuisineService.validateAndGetCuisineIds(
+      dto.cuisines,
+    );
     return this.restaurantModel.create({
       ...dto,
       cuisines: cuisineIds,
@@ -26,11 +24,12 @@ export class RestaurantService {
     });
   }
 
-  async findAll(cuisines?: string[]) {    
+  async findAll(cuisines?: string[]) {
     let filter = {};
 
     if (cuisines?.length) {
-      const cuisineIds = await this.validateAndGetCuisineIds(cuisines);
+      const cuisineIds =
+        await this.cuisineService.validateAndGetCuisineIds(cuisines);
       filter = { cuisines: { $in: cuisineIds } };
     }
 
@@ -52,23 +51,5 @@ export class RestaurantService {
 
     if (!doc) throw new NotFoundException('Restaurant not found');
     return doc;
-  }
-
-  /**
-   * Validate cuisine codes and return their IDs
-   */
-  private async validateAndGetCuisineIds(
-    codes: string[],
-  ): Promise<Types.ObjectId[]> {
-    const { ids, missing } =
-      await this.cuisineService.validateCodeExistence(codes);
-
-    if (missing.length) {
-      throw new BadRequestException(
-        `Unknown cuisine codes: ${missing.join(', ')}`,
-      );
-    }
-
-    return ids;
   }
 }

@@ -3,11 +3,6 @@ import { RestaurantService } from './restaurant.service';
 import { CreateRestaurantDto, QueryRestaurantsDto } from './restaurant.dto';
 
 @Controller('restaurants')
-@UsePipes(new ValidationPipe({ 
-  transform: true,
-  whitelist: true,
-  forbidNonWhitelisted: true 
-}))
 export class RestaurantController {
   constructor(private readonly service: RestaurantService) {}
 

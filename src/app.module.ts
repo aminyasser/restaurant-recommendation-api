@@ -4,9 +4,15 @@ import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { RestaurantModule } from './restaurant/restaurant.module';
 import { CuisineModule } from './cuisine/cuisine.module';
+import { UserModule } from './user/user.module';
 
 @Module({
-  imports: [MongooseModule.forRoot(process.env.MONGO_URL), RestaurantModule, CuisineModule],
+  imports: [
+    MongooseModule.forRoot(process.env.MONGO_URL),
+    RestaurantModule,
+    CuisineModule,
+    UserModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

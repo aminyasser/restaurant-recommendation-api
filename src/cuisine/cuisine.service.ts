@@ -1,4 +1,8 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Cuisine, CuisineDocument } from './cuisine.schema';
@@ -24,10 +28,9 @@ export class CuisineService {
   /**
    * Look up each cuisine code and tell the caller which ones
    * were found and which are missing.
+   * return ids, in cas of missing throw error
    */
-  async validateCodeExistence(
-    codes: string[],
-  ): Promise<{ ids: Types.ObjectId[]; missing: string[] }> {
+  async validateAndGetCuisineIds(codes: string[]): Promise<Types.ObjectId[]> {
     const cuisines = await this.cuisineModel
       .find({ code: { $in: codes } })
       .select('_id code')
@@ -41,6 +44,12 @@ export class CuisineService {
       id ? result.ids.push(id) : result.missing.push(code);
     }
 
-    return result;
+    if (result.missing.length) {
+      throw new BadRequestException(
+        `Unknown cuisine codes: ${result.missing.join(', ')}`,
+      );
+    }
+
+    return result.ids;
   }
 }
