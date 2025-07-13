@@ -113,7 +113,6 @@ export class UserService {
                 $mergeObjects: [
                   {
                     id: '$$follow._id',
-                    followers: '$$follow.followerCount',
                   },
                   {
                     $arrayElemAt: [
@@ -143,7 +142,6 @@ export class UserService {
                 id: '$$this.id',
                 nameEn: '$$this.nameEn',
                 slug: '$$this.slug',
-                followers: '$$this.followers',
               },
             },
           },
