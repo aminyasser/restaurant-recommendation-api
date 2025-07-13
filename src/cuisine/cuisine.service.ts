@@ -46,7 +46,7 @@ export class CuisineService {
 
     if (result.missing.length) {
       throw new BadRequestException(
-        `Unknown cuisine codes: ${result.missing.join(', ')}`,
+        `Unknown cuisine codes: ${result.missing.join(', ')}, create one via POST /cuisine`,
       );
     }
 
