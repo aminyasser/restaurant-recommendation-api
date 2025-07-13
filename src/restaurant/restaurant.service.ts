@@ -35,7 +35,7 @@ export class RestaurantService {
 
     return this.restaurantModel
       .find(filter)
-      .populate('cuisines', 'code name -_id')
+      .populate({ path: 'cuisines', model: 'Cuisine', select: 'code -_id' })
       .lean();
   }
 
@@ -46,7 +46,7 @@ export class RestaurantService {
 
     const doc = await this.restaurantModel
       .findOne(filter)
-      .populate('cuisines', 'code name -_id')
+      .populate({ path: 'cuisines', model: 'Cuisine', select: 'code -_id' })
       .lean();
 
     if (!doc) throw new NotFoundException('Restaurant not found');
