@@ -1,4 +1,4 @@
-import { IsArray, IsNotEmpty, IsString } from 'class-validator';
+import { IsArray, IsMongoId, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateUserDto {
   @IsNotEmpty()
@@ -8,4 +8,9 @@ export class CreateUserDto {
   @IsArray()
   @IsString({ each: true })
   favoriteCuisines: string[];
+}
+
+export class UserIdParamDto {
+  @IsMongoId()
+  userId!: string;
 }

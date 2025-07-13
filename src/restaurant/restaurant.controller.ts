@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post, Query, UsePipes, ValidationPipe } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseFloatPipe,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { RestaurantService } from './restaurant.service';
 import { CreateRestaurantDto, QueryRestaurantsDto } from './restaurant.dto';
 
@@ -14,6 +22,16 @@ export class RestaurantController {
   @Get()
   list(@Query() query: QueryRestaurantsDto) {
     return this.service.findAll(query.cuisines);
+  }
+
+  @Get('nearby')
+  nearby(
+    @Query('lng', ParseFloatPipe) lng: number,
+    @Query('lat', ParseFloatPipe) lat: number,
+    @Query('radius') radiusInKm?: string,
+  ) {
+    const radius = radiusInKm ? Number(radiusInKm) : 1000;
+    return this.service.nearby(lng, lat, radius);
   }
 
   @Get(':identifier')

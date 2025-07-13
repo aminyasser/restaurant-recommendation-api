@@ -1,6 +1,6 @@
-import { Body, Controller, Get, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto } from './user.dto';
+import { CreateUserDto, UserIdParamDto } from './user.dto';
 
 @Controller('users')
 export class UserController {
@@ -11,4 +11,8 @@ export class UserController {
     return this.service.create(dto);
   }
 
+  @Get('recommendations/:userId')
+  getForUser(@Param() { userId }: UserIdParamDto) {
+    return this.service.recommend(userId);
+  }
 }

@@ -52,4 +52,19 @@ export class RestaurantService {
     if (!doc) throw new NotFoundException('Restaurant not found');
     return doc;
   }
+
+  async nearby(lng: number, lat: number, radius = 1000) {
+    return this.restaurantModel.aggregate([
+      {
+        $geoNear: {
+          near: { type: 'Point', coordinates: [lng, lat] },
+          maxDistance: radius,
+          spherical: true,
+          distanceField: 'distance',
+        },
+      },
+      { $project: { _id: 1, nameEn: 1, slug: 1, distance: 1 } },
+      { $sort: { distance: 1 } },
+    ]);
+  }
 }
