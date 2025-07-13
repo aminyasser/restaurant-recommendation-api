@@ -6,6 +6,7 @@ import { RestaurantModule } from './restaurant/restaurant.module';
 import { CuisineModule } from './cuisine/cuisine.module';
 import { UserModule } from './user/user.module';
 import { FollowModule } from './follow/follow.module';
+import { SeederModule } from './database/seeder.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { FollowModule } from './follow/follow.module';
     CuisineModule,
     UserModule,
     FollowModule,
+    SeederModule,
   ],
   controllers: [AppController],
   providers: [AppService],
